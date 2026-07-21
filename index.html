@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>United States Small Cent Mintages</title>
+    <style>
+        /* Tech-Dark Theme Reset & Variables */
+        :root {
+            --bg-main: #0a0f1d;
+            --bg-card: #121829;
+            --bg-row-even: #161f38;
+            --accent-cyan: #00f2fe;
+            --accent-blue: #0072ff;
+            --text-primary: #f8fafc; 
+            --text-secondary: #94a3b8; 
+            --border-color: #24335c;
+            --text-bright: #38bdf8; 
+            
+            /* Token/Pill specific colors for Rarity */
+            --pill-common-bg: rgba(148, 163, 184, 0.1);
+            --pill-common-text: #cbd5e1;
+            --pill-low-bg: rgba(56, 189, 248, 0.12);
+            --pill-low-text: #38bdf8;
+            --pill-semi-bg: rgba(234, 179, 8, 0.12);
+            --pill-semi-text: #fde047;
+            --pill-key-bg: rgba(239, 68, 68, 0.15);
+            --pill-key-text: #fca5a5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Header / Tech Branding */
+        header {
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .timestamp {
+            font-family: monospace;
+            color: var(--accent-cyan);
+            font-size: 0.9rem;
+            background: rgba(0, 242, 254, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+        }
+
+        /* KPI Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-blue));
+        }
+
+        .card-label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-value {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            font-family: monospace;
+            white-space: nowrap;
+        }
+
+        .card-subtext {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Data Section Controls */
+        .table-toolbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .search-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            color: var(--text-bright);
+            width: 300px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+        }
+
+        /* Data Table Wrapper */
+        .table-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* Ensures strictly justified column balancing */
+        }
+
+        th, td {
+            width: 33.33%; /* Evenly justifies column spacing across the container */
+            padding: 0.85rem 1rem;
+            text-align: center; /* Centers all information cleanly below headers */
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: rgba(22, 31, 56, 0.9);
+            color: var(--accent-cyan);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        th:not(:last-child), td:not(:last-child) {
+            border-right: 1px solid rgba(36, 51, 92, 0.35);
+        }
+
+        td {
+            border-bottom: 1px solid rgba(36, 51, 92, 0.4);
+            font-size: 0.95rem;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--bg-row-even);
+        }
+
+        .year-val {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .mintage-val {
+            font-family: monospace;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-bright);
+        }
+
+        /* Rarity Pill Tags */
+        .pill {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .pill.key-date {
+            background-color: var(--pill-key-bg);
+            color: var(--pill-key-text);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .pill.semi-key {
+            background-color: var(--pill-semi-bg);
+            color: var(--pill-semi-text);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+
+        .pill.low-mintage {
+            background-color: var(--pill-low-bg);
+            color: var(--pill-low-text);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .pill.common {
+            background-color: var(--pill-common-bg);
+            color: var(--pill-common-text);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-blue);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>United States Small Cent Mintages</h1>
+        <div class="timestamp">TIMESPAN: 1857–2026</div>
+    </header>
+
+    <div class="dashboard-grid">
+        <div class="card">
+            <div class="card-label">Highest Mintage</div>
+            <div class="card-value" id="stat-max">-</div>
+            <div class="card-subtext" id="stat-max-year">Year / Mint: -</div>
+        </div>
+        <div class="card">
+            <div class="card-label">Lowest Mintage</div>
+            <div class="card-value" id="stat-min">-</div>
+            <div class="card-subtext" id="stat-min-year">Year / Mint: -</div>
+        </div>
+        <div class="card">
+            <div class="card-label">Total Mintage</div>
+            <div class="card-value" id="stat-total">-</div>
+            <div class="card-subtext">Cumulative Total</div>
+        </div>
+        <div class="card">
+            <div class="card-label">Annual Average</div>
+            <div class="card-value" id="stat-avg">-</div>
+            <div class="card-subtext">Per Recorded Mint Issue</div>
+        </div>
+    </div>
+
+    <div class="table-toolbar">
+        <input type="text" id="search-input" class="search-box" placeholder="Search Year or Rarity...">
+    </div>
+
+    <div class="table-container">
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th>Year / Mint</th>
+                    <th>Mintage Number</th>
+                    <th>Rarity Classification</th>
+                </tr>
+            </thead>
+            <tbody id="data-rows">
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Comprehensive Dataset structured exactly as mapped from the source sheet
+    const dataset = [
+        { year: "1857", mintage: 17450000, rarity: "Low Mintage" },
+        { year: "1858 Lg/Sm Letters", mintage: 24600000, rarity: "Low Mintage" },
+        { year: "1859", mintage: 36400000, rarity: "Low Mintage" },
+        { year: "1860", mintage: 20566000, rarity: "Low Mintage" },
+        { year: "1861", mintage: 10100000, rarity: "Semi-Key Date" },
+        { year: "1862", mintage: 28075000, rarity: "Low Mintage" },
+        { year: "1863", mintage: 49840000, rarity: "Low Mintage" },
+        { year: "1864", mintage: 13740000, rarity: "Semi-Key Date" },
+        { year: "1864 No L/With L", mintage: 39233714, rarity: "Low Mintage" },
+        { year: "1865", mintage: 35429286, rarity: "Low Mintage" },
+        { year: "1866", mintage: 9826500, rarity: "Semi-Key Date" },
+        { year: "1867", mintage: 9821000, rarity: "Semi-Key Date" },
+        { year: "1868", mintage: 10266500, rarity: "Semi-Key Date" },
+        { year: "1869", mintage: 6420000, rarity: "Semi-Key Date" },
+        { year: "1870", mintage: 5275000, rarity: "Semi-Key Date" },
+        { year: "1871", mintage: 3929500, rarity: "Semi-Key Date" },
+        { year: "1872", mintage: 4042000, rarity: "Semi-Key Date" },
+        { year: "1873", mintage: 11676500, rarity: "Semi-Key Date" },
+        { year: "1874", mintage: 12187500, rarity: "Semi-Key Date" },
+        { year: "1875", mintage: 13528000, rarity: "Semi-Key Date" },
+        { year: "1876", mintage: 7944000, rarity: "Semi-Key Date" },
+        { year: "1877", mintage: 852500, rarity: "Key Date" },
+        { year: "1878", mintage: 5797500, rarity: "Semi-Key Date" },
+        { year: "1879", mintage: 16228000, rarity: "Low Mintage" },
+        { year: "1880", mintage: 38691000, rarity: "Low Mintage" },
+        { year: "1881", mintage: 39208000, rarity: "Low Mintage" },
+        { year: "1882", mintage: 38578000, rarity: "Low Mintage" },
+        { year: "1883", mintage: 45591500, rarity: "Low Mintage" },
+        { year: "1884", mintage: 23257800, rarity: "Low Mintage" },
+        { year: "1885", mintage: 11761594, rarity: "Semi-Key Date" },
+        { year: "1886", mintage: 17650000, rarity: "Low Mintage" },
+        { year: "1887", mintage: 45223523, rarity: "Low Mintage" },
+        { year: "1888", mintage: 37489832, rarity: "Low Mintage" },
+        { year: "1889", mintage: 48866025, rarity: "Low Mintage" },
+        { year: "1890", mintage: 57180114, rarity: "Common" },
+        { year: "1891", mintage: 47070000, rarity: "Low Mintage" },
+        { year: "1892", mintage: 37647087, rarity: "Low Mintage" },
+        { year: "1893", mintage: 46640000, rarity: "Low Mintage" },
+        { year: "1894", mintage: 16749500, rarity: "Low Mintage" },
+        { year: "1895", mintage: 38341574, rarity: "Low Mintage" },
+        { year: "1896", mintage: 39055431, rarity: "Low Mintage" },
+        { year: "1897", mintage: 50464392, rarity: "Common" },
+        { year: "1898", mintage: 49821284, rarity: "Low Mintage" },
+        { year: "1899", mintage: 53598000, rarity: "Common" },
+        { year: "1900", mintage: 66831502, rarity: "Common" },
+        { year: "1901", mintage: 79609158, rarity: "Common" },
+        { year: "1902", mintage: 87374704, rarity: "Common" },
+        { year: "1903", mintage: 85092703, rarity: "Common" },
+        { year: "1904", mintage: 61326198, rarity: "Common" },
+        { year: "1905", mintage: 80717011, rarity: "Common" },
+        { year: "1906", mintage: 96020530, rarity: "Common" },
+        { year: "1907", mintage: 108137143, rarity: "Semi-Abundant" },
+        { year: "1908", mintage: 32326367, rarity: "Low Mintage" },
+        { year: "1908-S", mintage: 1115000, rarity: "Semi-Key Date" },
+        { year: "1909", mintage: 14368470, rarity: "Semi-Key Date" },
+        { year: "1909-S", mintage: 309000, rarity: "Key Date" },
+        { year: "1909 VDB", mintage: 27995000, rarity: "Low Mintage" },
+        { year: "1909-S VDB", mintage: 484000, rarity: "Key Date" },
+        { year: "1909 (Lincoln)", mintage: 72702618, rarity: "Common" },
+        { year: "1909-S (Lincoln)", mintage: 1825000, rarity: "Semi-Key Date" },
+        { year: "1910", mintage: 146801218, rarity: "Semi-Abundant" },
+        { year: "1910-S", mintage: 6045000, rarity: "Semi-Key Date" },
+        { year: "1911", mintage: 101177787, rarity: "Semi-Abundant" },
+        { year: "1911-D", mintage: 12672000, rarity: "Semi-Key Date" },
+        { year: "1911-S", mintage: 4026000, rarity: "Semi-Key Date" },
+        { year: "1912", mintage: 68153060, rarity: "Common" },
+        { year: "1912-D", mintage: 10411000, rarity: "Semi-Key Date" },
+        { year: "1912-S", mintage: 4431000, rarity: "Semi-Key Date" },
+        { year: "1913", mintage: 76532352, rarity: "Common" },
+        { year: "1913-D", mintage: 15804000, rarity: "Low Mintage" },
+        { year: "1913-S", mintage: 6101000, rarity: "Semi-Key Date" },
+        { year: "1914", mintage: 75238432, rarity: "Common" },
+        { year: "1914-D", mintage: 1193000, rarity: "Semi-Key Date" },
+        { year: "1914-S", mintage: 4137000, rarity: "Semi-Key Date" },
+        { year: "1915", mintage: 29092120, rarity: "Low Mintage" },
+        { year: "1915-D", mintage: 2205000, rarity: "Low Mintage" },
+        { year: "1915-S", mintage: 4833000, rarity: "Semi-Key Date" },
+        { year: "1916", mintage: 131832627, rarity: "Semi-Abundant" },
+        { year: "1916-D", mintage: 35956000, rarity: "Low Mintage" },
+        { year: "1916-S", mintage: 22510000, rarity: "Low Mintage" },
+        { year: "1917", mintage: 196429785, rarity: "Semi-Abundant" },
+        { year: "1917-D", mintage: 55120000, rarity: "Common" },
+        { year: "1917-S", mintage: 32620000, rarity: "Low Mintage" },
+        { year: "1918", mintage: 288104634, rarity: "Semi-Abundant" },
+        { year: "1918-D", mintage: 47830000, rarity: "Low Mintage" },
+        { year: "1918-S", mintage: 34680000, rarity: "Low Mintage" },
+        { year: "1919", mintage: 392021000, rarity: "Semi-Abundant" },
+        { year: "1919-D", mintage: 57154000, rarity: "Common" },
+        { year: "1919-S", mintage: 139760000, rarity: "Semi-Abundant" },
+        { year: "1920", mintage: 310165000, rarity: "Semi-Abundant" },
+        { year: "1920-D", mintage: 49280000, rarity: "Low Mintage" },
+        { year: "1920-S", mintage: 46220000, rarity: "Low Mintage" },
+        { year: "1921", mintage: 39157000, rarity: "Low Mintage" },
+        { year: "1921-S", mintage: 15274000, rarity: "Low Mintage" },
+        { year: "1922-D", mintage: 716000, rarity: "Semi-Key Date" },
+        { year: "1923", mintage: 74723000, rarity: "Common" },
+        { year: "1923-S", mintage: 8700000, rarity: "Semi-Key Date" },
+        { year: "1924", mintage: 75178000, rarity: "Common" },
+        { year: "1924-D", mintage: 252000, rarity: "Semi-Key Date" },
+        { year: "1924-S", mintage: 11696000, rarity: "Semi-Key Date" },
+        { year: "1925", mintage: 139949000, rarity: "Semi-Abundant" },
+        { year: "1925-D", mintage: 2258000, rarity: "Low Mintage" },
+        { year: "1925-S", mintage: 2638000, rarity: "Low Mintage" },
+        { year: "1926", mintage: 157088000, rarity: "Semi-Abundant" },
+        { year: "1926-D", mintage: 28020000, rarity: "Low Mintage" },
+        { year: "1926-S", mintage: 455000, rarity: "Semi-Key Date" },
+        { year: "1927", mintage: 144440000, rarity: "Semi-Abundant" },
+        { year: "1927-D", mintage: 27170000, rarity: "Low Mintage" },
+        { year: "1927-S", mintage: 14276000, rarity: "Semi-Key Date" },
+        { year: "1928", mintage: 134116000, rarity: "Semi-Abundant" },
+        { year: "1928-D", mintage: 31170000, rarity: "Low Mintage" },
+        { year: "1928-S", mintage: 17266000, rarity: "Low Mintage" },
+        { year: "1929", mintage: 185262000, rarity: "Semi-Abundant" },
+        { year: "1929-D", mintage: 41730000, rarity: "Low Mintage" },
+        { year: "1929-S", mintage: 50148000, rarity: "Common" },
+        { year: "1930", mintage: 157415000, rarity: "Semi-Abundant" },
+        { year: "1930-D", mintage: 40100000, rarity: "Low Mintage" },
+        { year: "1930-S", mintage: 24286000, rarity: "Low Mintage" },
+        { year: "1931", mintage: 19396000, rarity: "Low Mintage" },
+        { year: "1931-D", mintage: 4480000, rarity: "Semi-Key Date" },
+        { year: "1931-S", mintage: 866000, rarity: "Key Date" },
+        { year: "1932", mintage: 9062000, rarity: "Semi-Key Date" },
+        { year: "1932-D", mintage: 10500000, rarity: "Semi-Key Date" },
+        { year: "1933", mintage: 14360000, rarity: "Semi-Key Date" },
+        { year: "1933-D", mintage: 620000, rarity: "Semi-Key Date" },
+        { year: "1934", mintage: 219080000, rarity: "Semi-Abundant" },
+        { year: "1934-D", mintage: 28446000, rarity: "Low Mintage" },
+        { year: "1935", mintage: 245338000, rarity: "Semi-Abundant" },
+        { year: "1935-D", mintage: 47000000, rarity: "Low Mintage" },
+        { year: "1935-S", mintage: 38702000, rarity: "Low Mintage" },
+        { year: "1936", mintage: 309632000, rarity: "Semi-Abundant" },
+        { year: "1936-D", mintage: 40620000, rarity: "Low Mintage" },
+        { year: "1936-S", mintage: 29130000, rarity: "Low Mintage" },
+        { year: "1937", mintage: 309179320, rarity: "Semi-Abundant" },
+        { year: "1937-D", mintage: 50430000, rarity: "Common" },
+        { year: "1937-S", mintage: 34500000, rarity: "Low Mintage" },
+        { year: "1938", mintage: 156696734, rarity: "Semi-Abundant" },
+        { year: "1938-D", mintage: 20010000, rarity: "Low Mintage" },
+        { year: "1938-S", mintage: 15180000, rarity: "Low Mintage" },
+        { year: "1939", mintage: 316466000, rarity: "Semi-Abundant" },
+        { year: "1939-D", mintage: 15100000, rarity: "Low Mintage" },
+        { year: "1939-S", mintage: 52070000, rarity: "Common" },
+        { year: "1940", mintage: 586810000, rarity: "Abundant" },
+        { year: "1940-D", mintage: 81390000, rarity: "Common" },
+        { year: "1940-S", mintage: 112940000, rarity: "Semi-Abundant" },
+        { year: "1941", mintage: 887018000, rarity: "Abundant" },
+        { year: "1941-D", mintage: 12870000, rarity: "Semi-Abundant" },
+        { year: "1941-S", mintage: 92360000, rarity: "Common" },
+        { year: "1942", mintage: 657796000, rarity: "Abundant" },
+        { year: "1942-D", mintage: 206698000, rarity: "Semi-Abundant" },
+        { year: "1942-S", mintage: 85590000, rarity: "Common" },
+        { year: "1943 Steel", mintage: 684628670, rarity: "Abundant" },
+        { year: "1943-D Steel", mintage: 217660000, rarity: "Semi-Abundant" },
+        { year: "1943-S Steel", mintage: 191550000, rarity: "Semi-Abundant" },
+        { year: "1944", mintage: 1435400000, rarity: "Abundant" },
+        { year: "1944-D", mintage: 430578000, rarity: "Semi-Abundant" },
+        { year: "1944-S", mintage: 282760000, rarity: "Semi-Abundant" },
+        { year: "1945", mintage: 1040515000, rarity: "Abundant" },
+        { year: "1945-D", mintage: 266268000, rarity: "Semi-Abundant" },
+        { year: "1945-S", mintage: 181770000, rarity: "Semi-Abundant" },
+        { year: "1946", mintage: 991655000, rarity: "Abundant" },
+        { year: "1946-D", mintage: 315690000, rarity: "Semi-Abundant" },
+        { year: "1946-S", mintage: 198100000, rarity: "Semi-Abundant" },
+        { year: "1947", mintage: 190555000, rarity: "Semi-Abundant" },
+        { year: "1947-D", mintage: 194750000, rarity: "Semi-Abundant" },
+        { year: "1947-S", mintage: 99000000, rarity: "Common" },
+        { year: "1948", mintage: 317570000, rarity: "Semi-Abundant" },
+        { year: "1948-D", mintage: 172637500, rarity: "Semi-Abundant" },
+        { year: "1948-S", mintage: 81735000, rarity: "Common" },
+        { year: "1949", mintage: 217775000, rarity: "Semi-Abundant" },
+        { year: "1949-D", mintage: 153132500, rarity: "Semi-Abundant" },
+        { year: "1949-S", mintage: 64290000, rarity: "Common" },
+        { year: "1950", mintage: 272635000, rarity: "Semi-Abundant" },
+        { year: "1950-D", mintage: 334950000, rarity: "Semi-Abundant" },
+        { year: "1950-S", mintage: 118505000, rarity: "Semi-Abundant" },
+        { year: "1951", mintage: 284576000, rarity: "Semi-Abundant" },
+        { year: "1951-D", mintage: 625355000, rarity: "Abundant" },
+        { year: "1951-S", mintage: 136010000, rarity: "Semi-Abundant" },
+        { year: "1952", mintage: 186775000, rarity: "Semi-Abundant" },
+        { year: "1952-D", mintage: 746130000, rarity: "Abundant" },
+        { year: "1952-S", mintage: 137800004, rarity: "Semi-Abundant" },
+        { year: "1953", mintage: 256755000, rarity: "Semi-Abundant" },
+        { year: "1953-D", mintage: 700515000, rarity: "Abundant" },
+        { year: "1953-S", mintage: 181835000, rarity: "Semi-Abundant" },
+        { year: "1954", mintage: 71640050, rarity: "Common" },
+        { year: "1954-D", mintage: 251552500, rarity: "Semi-Abundant" },
+        { year: "1954-S", mintage: 96190000, rarity: "Common" },
+        { year: "1955", mintage: 330958000, rarity: "Semi-Abundant" },
+        { year: "1955-D", mintage: 563257550, rarity: "Abundant" },
+        { year: "1955-S", mintage: 44610000, rarity: "Low Mintage" },
+        { year: "1956", mintage: 420745000, rarity: "Semi-Abundant" },
+        { year: "1956-D", mintage: 1098201100, rarity: "Abundant" },
+        { year: "1957", mintage: 28254000, rarity: "Semi-Abundant" },
+        { year: "1957-D", mintage: 1051342000, rarity: "Abundant" },
+        { year: "1958", mintage: 252525000, rarity: "Semi-Abundant" },
+        { year: "1958-D", mintage: 800953300, rarity: "Abundant" },
+        { year: "1959", mintage: 610654291, rarity: "Abundant" },
+        { year: "1959-D", mintage: 1279760000, rarity: "Abundant" },
+        { year: "1960", mintage: 588096602, rarity: "Abundant" },
+        { year: "1960-D", mintage: 1580884000, rarity: "Abundant" },
+        { year: "1961", mintage: 756373244, rarity: "Abundant" },
+        { year: "1961-D", mintage: 1753266700, rarity: "Abundant" },
+        { year: "1962", mintage: 609263019, rarity: "Abundant" },
+        { year: "1962-D", mintage: 1793148140, rarity: "Abundant" },
+        { year: "1963", mintage: 757185645, rarity: "Abundant" },
+        { year: "1963-D", mintage: 1774020400, rarity: "Abundant" },
+        { year: "1964", mintage: 2652525762, rarity: "Abundant" },
+        { year: "1964-D", mintage: 3799071500, rarity: "Abundant" },
+        { year: "1965", mintage: 1499584900, rarity: "Abundant" },
+        { year: "1966", mintage: 2190409366, rarity: "Abundant" },
+        { year: "1967", mintage: 3050530444, rarity: "Abundant" },
+        { year: "1968", mintage: 1707880970, rarity: "Abundant" },
+        { year: "1968-D", mintage: 2886269600, rarity: "Abundant" },
+        { year: "1968-S", mintage: 261311507, rarity: "Semi-Abundant" },
+        { year: "1969", mintage: 1136910000, rarity: "Abundant" },
+        { year: "1969-D", mintage: 4002832200, rarity: "Abundant" },
+        { year: "1969-S", mintage: 547309631, rarity: "Abundant" },
+        { year: "1970", mintage: 1898315000, rarity: "Abundant" },
+        { year: "1970-D", mintage: 2891438900, rarity: "Abundant" },
+        { year: "1970-S", mintage: 693192814, rarity: "Abundant" },
+        { year: "1971", mintage: 1919490000, rarity: "Abundant" },
+        { year: "1971-D", mintage: 2911045600, rarity: "Abundant" },
+        { year: "1971-S", mintage: 528354192, rarity: "Abundant" },
+        { year: "1972", mintage: 2933255000, rarity: "Abundant" },
+        { year: "1972-D", mintage: 2665071400, rarity: "Abundant" },
+        { year: "1972-S", mintage: 380200104, rarity: "Semi-Abundant" },
+        { year: "1973", mintage: 3728245000, rarity: "Abundant" },
+        { year: "1973-D", mintage: 3549576588, rarity: "Abundant" },
+        { year: "1973-S", mintage: 317177295, rarity: "Semi-Abundant" },
+        { year: "1974", mintage: 4103183000, rarity: "Abundant" },
+        { year: "1974-D", mintage: 4235098000, rarity: "Abundant" },
+        { year: "1974-S", mintage: 409426660, rarity: "Semi-Abundant" },
+        { year: "1975", mintage: 3874182000, rarity: "Abundant" },
+        { year: "1975-D", mintage: 4505275300, rarity: "Abundant" },
+        { year: "1976", mintage: 3133580000, rarity: "Abundant" },
+        { year: "1976-D", mintage: 4221592455, rarity: "Abundant" },
+        { year: "1977", mintage: 3074575000, rarity: "Abundant" },
+        { year: "1977-D", mintage: 4194062300, rarity: "Abundant" },
+        { year: "1978", mintage: 5558605000, rarity: "Multitudinous" },
+        { year: "1978-D", mintage: 4280233400, rarity: "Abundant" },
+        { year: "1979", mintage: 6018515000, rarity: "Multitudinous" },
+        { year: "1979-D", mintage: 4139357254, rarity: "Abundant" },
+        { year: "1980", mintage: 7414705000, rarity: "Multitudinous" },
+        { year: "1980-D", mintage: 5140098660, rarity: "Multitudinous" },
+        { year: "1981", mintage: 7491750000, rarity: "Multitudinous" },
+        { year: "1981-D", mintage: 5373235677, rarity: "Multitudinous" },
+        { year: "1982", mintage: 10712525000, rarity: "Multitudinous" },
+        { year: "1982-D", mintage: 6012979368, rarity: "Multitudinous" },
+        { year: "1983", mintage: 7752355000, rarity: "Multitudinous" },
+        { year: "1983-D", mintage: 6467199428, rarity: "Multitudinous" },
+        { year: "1984", mintage: 8151079000, rarity: "Multitudinous" },
+        { year: "1984-D", mintage: 5569238906, rarity: "Multitudinous" },
+        { year: "1985", mintage: 5648489887, rarity: "Multitudinous" },
+        { year: "1985-D", mintage: 5287339926, rarity: "Multitudinous" },
+        { year: "1986", mintage: 4491395493, rarity: "Abundant" },
+        { year: "1986-D", mintage: 4442866698, rarity: "Abundant" },
+        { year: "1987", mintage: 4682466931, rarity: "Abundant" },
+        { year: "1987-D", mintage: 4879389514, rarity: "Abundant" },
+        { year: "1988", mintage: 6092810000, rarity: "Multitudinous" },
+        { year: "1988-D", mintage: 5253740443, rarity: "Multitudinous" },
+        { year: "1989", mintage: 7261535000, rarity: "Multitudinous" },
+        { year: "1989-D", mintage: 5345467111, rarity: "Multitudinous" },
+        { year: "1990", mintage: 6851765000, rarity: "Multitudinous" },
+        { year: "1990-D", mintage: 4922894533, rarity: "Abundant" },
+        { year: "1991", mintage: 5165940000, rarity: "Multitudinous" },
+        { year: "1991-D", mintage: 4158442076, rarity: "Abundant" },
+        { year: "1992", mintage: 4648905000, rarity: "Abundant" },
+        { year: "1992-D", mintage: 4448673300, rarity: "Abundant" },
+        { year: "1993", mintage: 5684705000, rarity: "Multitudinous" },
+        { year: "1993-D", mintage: 6426650571, rarity: "Multitudinous" },
+        { year: "1994", mintage: 6500850000, rarity: "Multitudinous" },
+        { year: "1994-D", mintage: 7131765000, rarity: "Multitudinous" },
+        { year: "1995", mintage: 6411440000, rarity: "Multitudinous" },
+        { year: "1995-D", mintage: 7128560000, rarity: "Multitudinous" },
+        { year: "1996", mintage: 6612465000, rarity: "Multitudinous" },
+        { year: "1996-D", mintage: 6510795000, rarity: "Multitudinous" },
+        { year: "1997", mintage: 4622800000, rarity: "Abundant" },
+        { year: "1997-D", mintage: 4576555000, rarity: "Abundant" },
+        { year: "1998", mintage: 5032200000, rarity: "Multitudinous" },
+        { year: "1998-D", mintage: 5225200000, rarity: "Multitudinous" },
+        { year: "1999", mintage: 5237600000, rarity: "Multitudinous" },
+        { year: "1999-D", mintage: 6360065000, rarity: "Multitudinous" },
+        { year: "2000", mintage: 5503200000, rarity: "Multitudinous" },
+        { year: "2000-D", mintage: 8774220000, rarity: "Multitudinous" },
+        { year: "2001", mintage: 4959600000, rarity: "Abundant" },
+        { year: "2001-D", mintage: 5374990000, rarity: "Multitudinous" },
+        { year: "2002", mintage: 3260800000, rarity: "Abundant" },
+        { year: "2002-D", mintage: 4028055000, rarity: "Abundant" },
+        { year: "2003", mintage: 3300000000, rarity: "Abundant" },
+        { year: "2003-D", mintage: 3548000000, rarity: "Abundant" },
+        { year: "2004", mintage: 3456400000, rarity: "Abundant" },
+        { year: "2004-D", mintage: 3379600000, rarity: "Abundant" },
+        { year: "2005", mintage: 3935600000, rarity: "Abundant" },
+        { year: "2005-D", mintage: 3764450500, rarity: "Abundant" },
+        { year: "2006", mintage: 4290000000, rarity: "Abundant" },
+        { year: "2006-D", mintage: 3944000000, rarity: "Abundant" },
+        { year: "2007", mintage: 3762400000, rarity: "Abundant" },
+        { year: "2007-D", mintage: 3638800000, rarity: "Abundant" },
+        { year: "2008", mintage: 2569600000, rarity: "Abundant" },
+        { year: "2008-D", mintage: 2849600000, rarity: "Abundant" },
+        { year: "2009", mintage: 1106400000, rarity: "Abundant" },
+        { year: "2009-D", mintage: 1247600000, rarity: "Abundant" },
+        { year: "2010", mintage: 1963630000, rarity: "Abundant" },
+        { year: "2010-D", mintage: 2407200000, rarity: "Abundant" },
+        { year: "2011", mintage: 2402400000, rarity: "Abundant" },
+        { year: "2011-D", mintage: 2536140000, rarity: "Abundant" },
+        { year: "2012", mintage: 3132000000, rarity: "Abundant" },
+        { year: "2012-D", mintage: 2883200000, rarity: "Abundant" },
+        { year: "2013", mintage: 3750400000, rarity: "Abundant" },
+        { year: "2013-D", mintage: 3319600000, rarity: "Abundant" },
+        { year: "2014", mintage: 3990800000, rarity: "Abundant" },
+        { year: "2014-D", mintage: 4155600000, rarity: "Abundant" },
+        { year: "2015", mintage: 4464100000, rarity: "Abundant" },
+        { year: "2015-D", mintage: 4424800000, rarity: "Abundant" },
+        { year: "2016", mintage: 4698400000, rarity: "Abundant" },
+        { year: "2016-D", mintage: 4420400000, rarity: "Abundant" },
+        { year: "2017-P", mintage: 4361220000, rarity: "Abundant" },
+        { year: "2017-D", mintage: 4272800000, rarity: "Abundant" },
+        { year: "2018", mintage: 4066800000, rarity: "Abundant" },
+        { year: "2018-D", mintage: 3738400000, rarity: "Abundant" },
+        { year: "2019", mintage: 3542800000, rarity: "Abundant" },
+        { year: "2019-D", mintage: 3497600000, rarity: "Abundant" },
+        { year: "2020", mintage: 3560800000, rarity: "Abundant" },
+        { year: "2020-D", mintage: 4035600000, rarity: "Abundant" },
+        { year: "2021", mintage: 3925820000, rarity: "Abundant" },
+        { year: "2021-D", mintage: 3982800000, rarity: "Abundant" },
+        { year: "2022", mintage: 3129200000, rarity: "Abundant" },
+        { year: "2022-D", mintage: 3230400000, rarity: "Abundant" },
+        { year: "2023", mintage: 2262000000, rarity: "Abundant" },
+        { year: "2023-D", mintage: 2260800000, rarity: "Abundant" },
+        { year: "2024", mintage: 1712000000, rarity: "Abundant" },
+        { year: "2024-D", mintage: 1513200000, rarity: "Abundant" },
+        { year: "2025", mintage: 655200000, rarity: "Abundant" },
+        { year: "2025-D", mintage: 645200000, rarity: "Abundant" },
+        { year: "2026 Collectible", mintage: null, rarity: "Pending Release" },
+        { year: "2026-D Collectible", mintage: null, rarity: "Pending Release" }
+    ];
+
+    const tbody = document.getElementById('data-rows');
+    const searchInput = document.getElementById('search-input');
+
+    // Function to calculate and render the dynamic top cards
+    function calculateStats() {
+        let total = 0;
+        let count = 0;
+        let maxMintage = -Infinity;
+        let maxYear = "";
+        let minMintage = Infinity;
+        let minYear = "";
+
+        dataset.forEach(entry => {
+            if (entry.mintage !== null && entry.mintage !== undefined) {
+                total += entry.mintage;
+                count++;
+
+                if (entry.mintage > maxMintage) {
+                    maxMintage = entry.mintage;
+                    maxYear = entry.year;
+                }
+                if (entry.mintage < minMintage) {
+                    minMintage = entry.mintage;
+                    minYear = entry.year;
+                }
+            }
+        });
+
+        const avgMintage = Math.round(total / count);
+
+        // Update the DOM cards
+        document.getElementById('stat-max').innerText = maxMintage.toLocaleString();
+        document.getElementById('stat-max-year').innerText = `Year: ${maxYear}`;
+        
+        document.getElementById('stat-min').innerText = minMintage.toLocaleString();
+        document.getElementById('stat-min-year').innerText = `Year: ${minYear}`;
+        
+        document.getElementById('stat-total').innerText = total.toLocaleString();
+        document.getElementById('stat-avg').innerText = avgMintage.toLocaleString();
+    }
+
+    // Function to map a classification styling class to a rarity level
+    function getRarityClass(rarity) {
+        const lower = rarity.toLowerCase();
+        if (lower.includes('key date') && !lower.includes('semi')) return 'key-date';
+        if (lower.includes('semi-key')) return 'semi-key';
+        if (lower.includes('low mintage')) return 'low-mintage';
+        return 'common';
+    }
+
+    // Function to render rows onto the balanced datatable layout
+    function displayTable(filterText = '') {
+        tbody.innerHTML = '';
+        const search = filterText.toLowerCase().trim();
+
+        dataset.forEach(entry => {
+            if (search !== '' && !entry.year.toLowerCase().includes(search) && !entry.rarity.toLowerCase().includes(search)) {
+                return; // Filter out rows not matching query
+            }
+
+            const tr = document.createElement('tr');
+            
+            // Format out nulls or pending values safely
+            const displayMintage = entry.mintage !== null ? entry.mintage.toLocaleString() : "N/A";
+            const rarityClass = getRarityClass(entry.rarity);
+
+            tr.innerHTML = `
+                <td><div class="year-val">${entry.year}</div></td>
+                <td><div class="mintage-val">${displayMintage}</div></td>
+                <td><span class="pill ${rarityClass}">${entry.rarity}</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Setup input listeners for dynamic filtering
+    searchInput.addEventListener('input', (e) => {
+        displayTable(e.target.value);
+    });
+
+    // Initialize application runtime
+    calculateStats();
+    displayTable();
+</script>
+</body>
+</html>
