@@ -16,20 +16,6 @@
             --text-secondary: #94a3b8; 
             --border-color: #24335c;
             --text-bright: #38bdf8; 
-            
-            /* Token/Pill specific colors for Coin Designs */
-            --pill-flying-bg: rgba(234, 179, 8, 0.15);
-            --pill-flying-text: #fde047;
-            --pill-indian-bg: rgba(239, 68, 68, 0.15);
-            --pill-indian-text: #fca5a5;
-            --pill-wheat-bg: rgba(168, 85, 247, 0.15);
-            --pill-wheat-text: #c084fc;
-            --pill-memorial-bg: rgba(56, 189, 248, 0.15);
-            --pill-memorial-text: #38bdf8;
-            --pill-commem-bg: rgba(34, 197, 94, 0.15);
-            --pill-commem-text: #4ade80;
-            --pill-shield-bg: rgba(148, 163, 184, 0.15);
-            --pill-shield-text: #cbd5e1;
         }
 
         * {
@@ -217,50 +203,9 @@
             color: var(--text-bright);
         }
 
-        /* Design Pill Tags */
-        .pill {
-            display: inline-block;
-            font-size: 0.8rem;
+        .design-val {
             font-weight: 600;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        .pill.flying-eagle {
-            background-color: var(--pill-flying-bg);
-            color: var(--pill-flying-text);
-            border: 1px solid rgba(234, 179, 8, 0.3);
-        }
-
-        .pill.indian-head {
-            background-color: var(--pill-indian-bg);
-            color: var(--pill-indian-text);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .pill.lincoln-wheat {
-            background-color: var(--pill-wheat-bg);
-            color: var(--pill-wheat-text);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-        }
-
-        .pill.lincoln-memorial {
-            background-color: var(--pill-memorial-bg);
-            color: var(--pill-memorial-text);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-        }
-
-        .pill.lincoln-commemorative {
-            background-color: var(--pill-commem-bg);
-            color: var(--pill-commem-text);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-
-        .pill.union-shield {
-            background-color: var(--pill-shield-bg);
-            color: var(--pill-shield-text);
-            border: 1px solid rgba(148, 163, 184, 0.3);
+            color: var(--text-primary);
         }
 
         /* Scrollbar Styling */
@@ -710,19 +655,6 @@
         document.getElementById('stat-avg').innerText = avgMintage.toLocaleString();
     }
 
-    // Map design name to pill CSS class
-    function getDesignClass(design) {
-        switch(design) {
-            case "Flying Eagle": return "flying-eagle";
-            case "Indian Head": return "indian-head";
-            case "Lincoln Wheat": return "lincoln-wheat";
-            case "Lincoln Memorial": return "lincoln-memorial";
-            case "Lincoln Commemorative": return "lincoln-commemorative";
-            case "Union Shield": return "union-shield";
-            default: return "union-shield";
-        }
-    }
-
     // Function to render rows onto the datatable layout
     function displayTable(filterText = '') {
         tbody.innerHTML = '';
@@ -737,12 +669,11 @@
             
             // Format out nulls or pending values safely
             const displayMintage = entry.mintage !== null ? entry.mintage.toLocaleString() : "N/A";
-            const designClass = getDesignClass(entry.design);
 
             tr.innerHTML = `
                 <td><div class="year-val">${entry.year}</div></td>
                 <td><div class="mintage-val">${displayMintage}</div></td>
-                <td><span class="pill ${designClass}">${entry.design}</span></td>
+                <td><div class="design-val">${entry.design}</div></td>
             `;
             tbody.appendChild(tr);
         });
