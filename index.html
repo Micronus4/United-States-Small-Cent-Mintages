@@ -673,16 +673,30 @@
         document.getElementById('stat-avg').innerText = avgMintage.toLocaleString();
     }
 
+    // Helper function to build a searchable composition string including full element names
+    function getSearchableComposition(composition) {
+        let searchable = composition;
+        // Expand chemical symbols to full metal names so both "Cu" and "copper" match
+        searchable += " " + searchable
+            .replace(/\bCu\b/g, "copper")
+            .replace(/\bZn\b/g, "zinc")
+            .replace(/\bNi\b/g, "nickel")
+            .replace(/\bSn\b/g, "tin");
+        return searchable.toLowerCase();
+    }
+
     // Function to render rows onto the datatable layout
     function displayTable(filterText = '') {
         tbody.innerHTML = '';
         const search = filterText.toLowerCase().trim();
 
         rawDataset.forEach(entry => {
-            if (search !== '' && 
-                !entry.year.toLowerCase().includes(search) && 
-                !entry.design.toLowerCase().includes(search) &&
-                !entry.composition.toLowerCase().includes(search)) {
+            const yearMatch = entry.year.toLowerCase().includes(search);
+            const designMatch = entry.design.toLowerCase().includes(search);
+            const searchableComp = getSearchableComposition(entry.composition);
+            const compositionMatch = searchableComp.includes(search);
+
+            if (search !== '' && !yearMatch && !designMatch && !compositionMatch) {
                 return; // Filter out rows not matching query
             }
 
