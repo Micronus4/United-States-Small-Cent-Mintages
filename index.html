@@ -282,7 +282,7 @@
 <script>
     // Helper function to resolve dynamic copper/metal compositions by historical standard
     function getComposition(yearStr) {
-        if (yearStr.includes("1943")) return "Zinc-Coated Steel";
+        if (yearStr.includes("1943")) return "99% Stl, 1% Zn";
         
         const year = parseInt(yearStr);
         if (year >= 1857 && year <= 1864) return "88% Cu, 12% Ni";
@@ -681,7 +681,8 @@
             .replace(/\bCu\b/g, "copper")
             .replace(/\bZn\b/g, "zinc")
             .replace(/\bNi\b/g, "nickel")
-            .replace(/\bSn\b/g, "tin");
+            .replace(/\bSn\b/g, "tin")
+            .replace(/\bStl\b/g, "steel");
         return searchable.toLowerCase();
     }
 
