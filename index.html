@@ -432,11 +432,6 @@
             <div class="card-label">Cumulative Total</div>
             <div class="card-value" id="stat-total">-</div>
         </div>
-        <div class="card">
-            <div class="card-label">Annual Average</div>
-            <div class="card-value" id="stat-avg">-</div>
-            <div class="card-subtext">Per Recorded Mint Issue</div>
-        </div>
     </div>
 
     <div class="table-toolbar">
@@ -1138,12 +1133,11 @@
     const tbody = document.getElementById('data-rows');
     const searchInput = document.getElementById('search-input');
 
-    const statMax = document.getElementById('stat-max');
+const statMax = document.getElementById('stat-max');
     const statMaxYear = document.getElementById('stat-max-year');
     const statMin = document.getElementById('stat-min');
     const statMinYear = document.getElementById('stat-min-year');
     const statTotal = document.getElementById('stat-total');
-    const statAvg = document.getElementById('stat-avg');
 
     function switchPage(key) {
         currentKey = key;
@@ -1173,7 +1167,6 @@
             statMin.textContent = "N/A";
             statMinYear.textContent = "Year: -";
             statTotal.textContent = "0";
-            statAvg.textContent = "0";
             return;
         }
 
@@ -1192,7 +1185,6 @@
         statMin.textContent = minObj.mintage.toLocaleString();
         statMinYear.textContent = `Year: ${minObj.year}`;
         statTotal.textContent = total.toLocaleString();
-        statAvg.textContent = Math.round(total / validEntries.length).toLocaleString();
     }
 
     function getSearchableComposition(compStr) {
