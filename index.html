@@ -318,64 +318,69 @@ th, td {
         /* ==========================================
            Pixel 5 / Mobile Strict Overlap Prevention
            ========================================== */
-        @media (max-width: 480px) {
-            body {
-                padding: 0.5rem !important;
-                display: block !important;
-            }
+@media (max-width: 480px) {
+body {
+  padding: 0.5rem !important;
+  display: block !important;
+}
 
-            .container, .main-container, div[style*="max-width"] {
-                width: 100% !important;
-                max-width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                overflow-x: hidden !important;
-            }
+.container, .main-container, div[style*="max-width"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+}
 
-            header {
-                flex-direction: column !important;
-                align-items: stretch !important;
-                gap: 0.75rem;
-                margin-bottom: 1rem;
-            }
+header {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
 
-            .header-left {
-                width: 100% !important;
-                flex-direction: column;
-                align-items: flex-start;
-            }
+.header-left {
+  width: 100% !important;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-            h1 {
-                font-size: 1.15rem !important;
-                white-space: normal !important;
-                word-break: break-word;
-            }
+h1 {
+  font-size: 1.15rem !important;
+  white-space: normal !important;
+  word-break: break-word;
+}
 
-.dashboard-grid {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 0.5rem !important;
-                width: 100% !important;
-                margin-bottom: 1rem !important;
-            }
+/* Target the stats dashboard-grid specifically so it doesn't break the custom card layout */
+.dashboard-grid:has(.responsive-stat-card) {
+  display: flex !important;
+  width: 100% !important;
+  padding: 0 0.2rem !important;
+  box-sizing: border-box !important;
+  margin-bottom: 1rem !important;
+}
 
-            .card {
-                padding: 0.45rem 0.6rem !important;
-                min-height: auto !important;
-                height: auto !important;
-                min-width: 0 !important;
-            }
+.responsive-stat-card {
+  display: grid !important;
+  grid-template-columns: minmax(120px, 1.1fr) 1px minmax(130px, 1.1fr) !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0.8rem 0.6rem !important;
+  box-sizing: border-box !important;
+}
 
-            .card-title {
-                font-size: 0.62rem !important;
-                margin-bottom: 0.15rem !important;
-                line-height: 1.1 !important;
-            }
+.card {
+  min-height: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+}
 
-            .card-value {
-                font-size: 0.9rem !important;
-                line-height: 1.2 !important;
-            }
+.card-value {
+  font-size: clamp(0.85rem, 3vw, 1.2rem) !important;
+  line-height: 1.2 !important;
+  word-break: break-word !important;
+}
 }
 
             .table-toolbar {
@@ -428,7 +433,7 @@ th, td {
 <body>
 
 <div class="container">
-    <header>
+<header>
         <div class="header-left">
             <h1 id="page-title">U.S. Circulation Small Cent Mintages</h1>
             <div class="pill-toggle">
@@ -436,32 +441,64 @@ th, td {
                 <button class="pill-btn" onclick="switchPage('nickels')">Nickels</button>
             </div>
         </div>
-        <div class="timestamp" id="timestamp-badge">YEARS: 1857–2026</div>
+        <div class="timestamp" id="timestamp-badge" style="width: 155px; min-width: 155px; white-space: nowrap; flex-shrink: 0; text-align: center;">YEARS: 1857–2026</div>
     </header>
 
-<div class="dashboard-grid" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 1.5rem;">
-      <div class="card" style="display: inline-flex; flex-direction: column; width: fit-content; min-width: 280px; padding: 1.5rem 1.8rem;">
-          <div class="card-label" style="font-size: 0.95rem;">Mintage Extremes</div>
-          <div class="merged-mintage-container" style="display: flex; gap: 2rem; align-items: flex-start; margin-top: 0.5rem;">
-              <div style="min-width: 0;">
-                  <div style="font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">Highest</div>
-                  <div class="card-value" id="stat-max" style="font-size: 1.8rem; line-height: 1.3;">-</div>
-                  <div class="card-subtext" id="stat-max-year" style="font-size: 0.95rem;">Year: -</div>
-              </div>
-              <div style="width: 1px; background: var(--border-color); align-self: stretch; opacity: 0.6;"></div>
-              <div style="min-width: 0;">
-                  <div style="font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">Lowest</div>
-                  <div class="card-value" id="stat-min" style="font-size: 1.8rem; line-height: 1.3;">-</div>
-                  <div class="card-subtext" id="stat-min-year" style="font-size: 0.95rem;">Year: -</div>
-              </div>
+<style>
+/* Fixes body margins on mobile so the card can expand fully */
+@media screen and (max-width: 500px) {
+  body {
+    padding: 1rem 0.5rem !important;
+  }
+}
+</style>
+<style>
+/* Mobile-first override specifically for the stats card to prevent any grid squishing */
+@media screen and (max-width: 480px) {
+  .stats-card-wrapper {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    padding: 1rem !important;
+  }
+  .stats-divider {
+    display: none !important;
+  }
+  .stats-text-val {
+    font-size: 1.25rem !important;
+  }
+}
+</style>
+
+<div class="dashboard-grid" style="display: flex; justify-content: center; width: 100%; box-sizing: border-box; margin-bottom: 1.5rem;">
+  <div class="card" style="display: grid; grid-template-columns: minmax(110px, 1fr) 1px minmax(120px, 1fr); align-items: stretch; gap: 0.6rem; width: 100%; max-width: 650px; padding: 1rem 0.8rem; box-sizing: border-box;">
+
+      <div style="min-width: 0; display: flex; flex-direction: column; justify-content: center;">
+          <div class="card-label" style="font-size: 0.68rem;">Cumulative Total</div>
+          <div class="card-value" id="stat-total" style="font-size: clamp(0.9rem, 3.2vw, 1.5rem); margin-top: 0.2rem; word-break: break-word; line-height: 1.2;">-</div>
+      </div>
+
+      <div style="width: 1px; background-color: var(--border-color); align-self: stretch;"></div>
+
+      <div style="min-width: 0; display: flex; flex-direction: column; gap: 0.4rem; justify-content: center;">
+          <div class="card-label" style="font-size: 0.68rem;">Highest / Lowest Mintage</div>
+
+          <div style="min-width: 0;">
+              <div style="font-size: 0.55rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Highest</div>
+              <div class="card-value" id="stat-max" style="font-size: clamp(0.75rem, 2.5vw, 1.2rem); word-break: break-word; line-height: 1.2;">10,712,525,000</div>
+              <div class="card-subtext" id="stat-max-year" style="font-size: 0.65rem;">Year: 1982</div>
+          </div>
+
+          <hr style="border: none; border-top: 1px solid var(--border-color); margin: 0.05rem 0;">
+
+          <div style="min-width: 0;">
+              <div style="font-size: 0.55rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Lowest</div>
+              <div class="card-value" id="stat-min" style="font-size: clamp(0.75rem, 2.5vw, 1.2rem); word-break: break-word; line-height: 1.2;">309,000</div>
+              <div class="card-subtext" id="stat-min-year" style="font-size: 0.65rem;">Year: 1909-S</div>
           </div>
       </div>
 
-      <div class="card" style="display: inline-flex; flex-direction: column; width: fit-content; min-width: 220px; padding: 1.5rem 1.8rem; justify-content: center;">
-          <div class="card-label" style="font-size: 0.95rem;">Cumulative Total</div>
-          <div class="card-value" id="stat-total" style="font-size: 1.8rem; line-height: 1.3; margin-top: 0.5rem;">-</div>
-      </div>
   </div>
+</div>
 
 <div style="width: 50%; display: flex; justify-content: flex-start; margin-bottom: 1rem;">
       <input type="text" id="search-input" class="search-box" placeholder="Search Year, Design, or Composition...">
@@ -1255,7 +1292,7 @@ const statMax = document.getElementById('stat-max');
     displayTable();
 </script>
 <div style="position: fixed; bottom: 15px; right: 20px; font-family: monospace; font-size: 0.8rem; color: var(--text-bright); opacity: 0.55; pointer-events: none; z-index: 1000;">
-      V19
+      V20
   </div>
 </body>
 </html>
