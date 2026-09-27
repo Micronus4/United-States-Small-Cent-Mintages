@@ -33,48 +33,60 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             background-color: var(--bg-main);
             color: var(--text-primary);
-            padding: 2rem;
+            padding: clamp(0.75rem, 2.5vw, 2rem);
+            padding-bottom: 3rem;
             display: flex;
             justify-content: center;
         }
 
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 100%;
+            min-width: 0;
         }
 
         /* Header / Tech Branding */
         header {
-            margin-bottom: 2rem;
+            margin-bottom: clamp(1rem, 2.5vw, 2rem);
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 1rem;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.75rem;
         }
 
-        .header-left {
+        .header-controls {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            justify-content: space-between;
             flex-wrap: wrap;
+            gap: 0.75rem;
+            min-width: 0;
         }
 
         h1 {
-            font-size: 1.75rem;
+            font-size: clamp(1rem, 2.6vw, 1.75rem);
             font-weight: 700;
             letter-spacing: 1px;
             background: linear-gradient(45deg, var(--accent-cyan), var(--accent-blue));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             text-transform: uppercase;
-            min-width: 38em;
-            flex-shrink: 0;
+            min-width: 0;
+            max-width: 100%;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
         }
 
         /* Pill-shaped Page Switcher */
@@ -86,20 +98,24 @@
             padding: 3px;
             gap: 2px;
             flex-shrink: 0;
+            flex-wrap: wrap;
+            width: max-content;
+            max-width: 100%;
         }
 
         .pill-btn {
             background: transparent;
             border: none;
             color: var(--text-secondary);
-            padding: 0.4rem 1rem;
-            font-size: 0.85rem;
+            padding: 0.4rem clamp(0.7rem, 2vw, 1rem);
+            font-size: clamp(0.75rem, 1.6vw, 0.85rem);
             font-weight: 600;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.25s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            white-space: nowrap;
         }
 
         .pill-btn:hover {
@@ -115,19 +131,22 @@
         .timestamp {
             font-family: monospace;
             color: var(--accent-cyan);
-            font-size: 0.9rem;
+            font-size: clamp(0.75rem, 1.6vw, 0.9rem);
             background: rgba(0, 242, 254, 0.1);
             padding: 0.25rem 0.75rem;
             border-radius: 4px;
             border: 1px solid rgba(0, 242, 254, 0.2);
+            white-space: nowrap;
+            text-align: center;
+            flex: 0 1 auto;
         }
 
         /* KPI Dashboard Grid */
         .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
+            display: flex;
+            justify-content: stretch;
+            width: 100%;
+            margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
         }
 
         .card {
@@ -155,22 +174,62 @@
 
         .card-label {
             color: var(--text-secondary);
-            font-size: 0.8rem;
+            font-size: clamp(0.65rem, 1.5vw, 0.8rem);
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 0.5rem;
         }
 
         .card-value {
-            font-size: 1.45rem;
+            font-size: clamp(0.9rem, 3.2vw, 1.5rem);
             font-weight: 700;
             color: var(--text-bright);
             font-family: monospace;
-            white-space: nowrap;
+            overflow-wrap: anywhere;
+            line-height: 1.2;
+            min-width: 0;
+        }
+
+        .stats-card {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1.1fr);
+            align-items: stretch;
+            gap: clamp(0.5rem, 2vw, 1rem);
+            width: 100%;
+            max-width: 100%;
+            padding: clamp(0.85rem, 2vw, 1.25rem) clamp(0.85rem, 2vw, 1.25rem) clamp(0.85rem, 2vw, 1.25rem) clamp(1rem, 2.5vw, 1.5rem);
+        }
+
+        .stats-col {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stats-col-stack {
+            gap: 0.4rem;
+        }
+
+        .stats-divider {
+            width: 1px;
+            background-color: var(--border-color);
+            align-self: stretch;
+        }
+
+        .stats-block {
+            min-width: 0;
+        }
+
+        .stats-kicker {
+            font-size: clamp(0.5rem, 1.5vw, 0.55rem);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 700;
         }
 
         .card-subtext {
-            font-size: 0.8rem;
+            font-size: clamp(0.65rem, 1.4vw, 0.8rem);
             color: var(--text-secondary);
             margin-top: 0.25rem;
         }
@@ -178,34 +237,35 @@
         /* Data Section Controls */
         .table-toolbar {
             display: flex;
-            justify-content: flex-end;
-            align-items: center;
+            width: 100%;
             margin-bottom: 1rem;
         }
 
-.search-box {
-          background: var(--bg-card);
-          border: 1px solid var(--border-color);
-          padding: 0.6rem 1rem;
-          border-radius: 6px;
-          color: var(--text-bright);
-          width: 66px;
-          outline: none;
-          transition: all 0.3s ease;
-      }
+        .search-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.7rem 1rem;
+            border-radius: 6px;
+            color: var(--text-bright);
+            width: 100%;
+            min-width: 0;
+            outline: none;
+            font-size: clamp(0.85rem, 1.8vw, 1rem);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
 
-      .search-box:focus {
-          width: 300px;
-          border-color: var(--accent-cyan);
-          box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
-      }
+        .search-box:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+        }
 
         /* Data Table Wrapper */
         .table-container {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            overflow: hidden;
+            overflow-x: auto;
+            max-width: 100%;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
 
@@ -215,86 +275,65 @@
             table-layout: fixed;
         }
 
-th, td {
-          width: 25%;
-          padding: clamp(0.5rem, 1.2vw, 0.85rem) clamp(0.4rem, 1vw, 1rem);
-          text-align: center;
-          vertical-align: middle;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-      }
+        th, td {
+            padding: clamp(0.4rem, 1.2vw, 0.85rem) clamp(0.3rem, 1vw, 0.85rem);
+            text-align: center;
+            vertical-align: middle;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            min-width: 0;
+        }
 
-      th {
-          background-color: rgba(22, 31, 56, 0.95);
-          color: var(--accent-cyan);
-          font-weight: 700;
-          text-transform: uppercase;
-          font-size: clamp(0.7rem, 1.1vw, 0.85rem);
-          letter-spacing: 0.5px;
-          border-bottom: 2px solid var(--border-color);
-          position: sticky;
-          top: 0;
-          z-index: 10;
-      }
+        th:nth-child(1), td:nth-child(1) { width: 22%; }
+        th:nth-child(2), td:nth-child(2) { width: 26%; }
+        th:nth-child(3), td:nth-child(3) { width: 26%; }
+        th:nth-child(4), td:nth-child(4) { width: 26%; }
 
-      th:not(:last-child), td:not(:last-child) {
-          border-right: 1px solid rgba(36, 51, 92, 0.35);
-      }
+        th {
+            background-color: rgba(22, 31, 56, 0.95);
+            color: var(--accent-cyan);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: clamp(0.65rem, 1.4vw, 0.85rem);
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
 
-      td {
-          border-bottom: 1px solid rgba(36, 51, 92, 0.4);
-          font-size: clamp(0.75rem, 1.2vw, 0.95rem);
-      }
+        th:not(:last-child), td:not(:last-child) {
+            border-right: 1px solid rgba(36, 51, 92, 0.35);
+        }
 
-      tr:nth-child(even) {
-          background-color: var(--bg-row-even);
-      }
+        td {
+            border-bottom: 1px solid rgba(36, 51, 92, 0.4);
+            font-size: clamp(0.7rem, 1.4vw, 0.95rem);
+        }
 
-      .year-val {
-          font-weight: 600;
-          color: var(--text-primary);
-          font-size: clamp(0.75rem, 1.2vw, 0.95rem);
-      }
+        tr:nth-child(even) {
+            background-color: var(--bg-row-even);
+        }
 
-.mintage-val {
-          font-family: monospace;
-          font-weight: 700;
-          font-size: clamp(1.1rem, 2.2vw, 1.5rem);
-          color: var(--text-bright);
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-      }
+        .year-val,
+        .design-val,
+        .composition-val {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: clamp(0.7rem, 1.4vw, 0.95rem);
+        }
 
-      .design-val {
-          font-weight: 600;
-          color: var(--text-primary);
-          font-size: clamp(0.75rem, 1.2vw, 0.95rem);
-      }
-
-      .composition-val {
-          font-weight: 600;
-          color: var(--text-primary);
-          font-size: clamp(0.75rem, 1.2vw, 0.95rem);
-      }
-
-
-      .design-val {
-          font-weight: 600;
-          color: var(--text-primary);
-          font-size: clamp(0.75rem, 1.2vw, 0.95rem);
-      }
-
-      .composition-val {
-          font-weight: 600;
-          color: var(--text-primary);
-          font-size: clamp(0.75rem, 1.2vw, 0.95rem);
-      }
+        .mintage-val {
+            font-family: monospace;
+            font-weight: 700;
+            font-size: clamp(0.8rem, 2vw, 1.35rem);
+            color: var(--text-bright);
+        }
 
         /* Scrollbar Styling */
         ::-webkit-scrollbar {
             width: 8px;
+            height: 8px;
         }
         ::-webkit-scrollbar-track {
             background: var(--bg-main);
@@ -307,126 +346,31 @@ th, td {
             background: var(--accent-blue);
         }
 
-        /* Global Anti-Horizontal Scroll & Overlap Lock */
-        html, body {
-            width: 100%;
-            max-width: 100vw;
-            overflow-x: hidden !important;
-            position: relative;
+        @media (max-width: 720px) {
+            .header-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .timestamp {
+                width: 100%;
+            }
+
+            .stats-card {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-divider {
+                width: 100%;
+                height: 1px;
+            }
         }
 
-        /* ==========================================
-           Pixel 5 / Mobile Strict Overlap Prevention
-           ========================================== */
-@media (max-width: 480px) {
-body {
-  padding: 0.5rem !important;
-  display: block !important;
-}
-
-.container, .main-container, div[style*="max-width"] {
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow-x: hidden !important;
-}
-
-header {
-  flex-direction: column !important;
-  align-items: stretch !important;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.header-left {
-  width: 100% !important;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-h1 {
-  font-size: 1.15rem !important;
-  white-space: normal !important;
-  word-break: break-word;
-}
-
-/* Target the stats dashboard-grid specifically so it doesn't break the custom card layout */
-.dashboard-grid:has(.responsive-stat-card) {
-  display: flex !important;
-  width: 100% !important;
-  padding: 0 0.2rem !important;
-  box-sizing: border-box !important;
-  margin-bottom: 1rem !important;
-}
-
-.responsive-stat-card {
-  display: grid !important;
-  grid-template-columns: minmax(120px, 1.1fr) 1px minmax(130px, 1.1fr) !important;
-  gap: 0.5rem !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  padding: 0.8rem 0.6rem !important;
-  box-sizing: border-box !important;
-}
-
-.card {
-  min-height: auto !important;
-  height: auto !important;
-  min-width: 0 !important;
-}
-
-.card-value {
-  font-size: clamp(0.85rem, 3vw, 1.2rem) !important;
-  line-height: 1.2 !important;
-  word-break: break-word !important;
-}
-}
-
-            .table-toolbar {
-                flex-direction: column !important;
-                gap: 0rem !important;
-                width: 47% !important;
-            }
-
-            .search-box {
-                width: 47% !important;
-                max-width: 100% !important;
-            }
-
-            .table-container {
-                width: 100% !important;
-                overflow-x: hidden !important;
-            }
-
-            table {
-                width: 100% !important;
-                table-layout: fixed !important;
-            }
-
-            /* Custom Column Weights */
-            th:nth-child(1), td:nth-child(1) { width: 18%; } /* Year */
-            th:nth-child(2), td:nth-child(2) { width: 30%; } /* Mintage */
-            th:nth-child(3), td:nth-child(3) { width: 26%; } /* Design */
-            th:nth-child(4), td:nth-child(4) { width: 26%; } /* Composition */
-
-            th, td {
-                padding: 0.4rem 0.1rem !important;
-                font-size: 0.7rem !important;
-                white-space: normal !important;
-                word-break: break-word !important;
-                overflow: hidden;
-            }
-
-            th {
-                font-size: 0.65rem !important;
-            }
-
-/* Force Mintage values to shrink-to-fit and never wrap onto two lines */
-          .mintage-val {
-              font-size: clamp(0.85rem, 3.5vw, 1.15rem) !important;
-              white-space: nowrap !important;
-          }
+        @media (max-width: 480px) {
+            th:nth-child(1), td:nth-child(1) { width: 20%; }
+            th:nth-child(2), td:nth-child(2) { width: 28%; }
+            th:nth-child(3), td:nth-child(3) { width: 26%; }
+            th:nth-child(4), td:nth-child(4) { width: 26%; }
         }
     </style>
 </head>
@@ -434,73 +378,46 @@ h1 {
 
 <div class="container">
 <header>
-        <div class="header-left">
             <h1 id="page-title">U.S. Circulation Small Cent Mintages</h1>
-            <div class="pill-toggle">
-                <button class="pill-btn active" onclick="switchPage('pennies')">Pennies</button>
-                <button class="pill-btn" onclick="switchPage('nickels')">Nickels</button>
+            <div class="header-controls">
+                <div class="pill-toggle">
+                    <button class="pill-btn active" onclick="switchPage('pennies')">Pennies</button>
+                    <button class="pill-btn" onclick="switchPage('nickels')">Nickels</button>
+                </div>
+                <div class="timestamp" id="timestamp-badge">YEARS: 1857–2026</div>
             </div>
-        </div>
-        <div class="timestamp" id="timestamp-badge" style="width: 155px; min-width: 155px; white-space: nowrap; flex-shrink: 0; text-align: center;">YEARS: 1857–2026</div>
-    </header>
+        </header>
 
-<style>
-/* Fixes body margins on mobile so the card can expand fully */
-@media screen and (max-width: 500px) {
-  body {
-    padding: 1rem 0.5rem !important;
-  }
-}
-</style>
-<style>
-/* Mobile-first override specifically for the stats card to prevent any grid squishing */
-@media screen and (max-width: 480px) {
-  .stats-card-wrapper {
-    grid-template-columns: 1fr !important;
-    gap: 1rem !important;
-    padding: 1rem !important;
-  }
-  .stats-divider {
-    display: none !important;
-  }
-  .stats-text-val {
-    font-size: 1.25rem !important;
-  }
-}
-</style>
-
-<div class="dashboard-grid" style="display: flex; justify-content: center; width: 100%; box-sizing: border-box; margin-bottom: 1.5rem;">
-  <div class="card" style="display: grid; grid-template-columns: minmax(110px, 1fr) 1px minmax(120px, 1fr); align-items: stretch; gap: 0.6rem; width: 100%; max-width: 650px; padding: 1rem 0.8rem; box-sizing: border-box;">
-
-      <div style="min-width: 0; display: flex; flex-direction: column; justify-content: center;">
-          <div class="card-label" style="font-size: 0.68rem;">Cumulative Total</div>
-          <div class="card-value" id="stat-total" style="font-size: clamp(0.9rem, 3.2vw, 1.5rem); margin-top: 0.2rem; word-break: break-word; line-height: 1.2;">-</div>
+<div class="dashboard-grid">
+  <div class="card stats-card">
+      <div class="stats-col">
+          <div class="card-label">Cumulative Total</div>
+          <div class="card-value" id="stat-total" style="margin-top: 0.2rem;">-</div>
       </div>
 
-      <div style="width: 1px; background-color: var(--border-color); align-self: stretch;"></div>
+      <div class="stats-divider"></div>
 
-      <div style="min-width: 0; display: flex; flex-direction: column; gap: 0.4rem; justify-content: center;">
-          <div class="card-label" style="font-size: 0.68rem;">Highest / Lowest Mintage</div>
+      <div class="stats-col stats-col-stack">
+          <div class="card-label">Highest / Lowest Mintage</div>
 
-          <div style="min-width: 0;">
-              <div style="font-size: 0.55rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Highest</div>
-              <div class="card-value" id="stat-max" style="font-size: clamp(0.75rem, 2.5vw, 1.2rem); word-break: break-word; line-height: 1.2;">10,712,525,000</div>
-              <div class="card-subtext" id="stat-max-year" style="font-size: 0.65rem;">Year: 1982</div>
+          <div class="stats-block">
+              <div class="stats-kicker">Highest</div>
+              <div class="card-value" id="stat-max" style="font-size: clamp(0.75rem, 2.5vw, 1.2rem);">10,712,525,000</div>
+              <div class="card-subtext" id="stat-max-year">Year: 1982</div>
           </div>
 
           <hr style="border: none; border-top: 1px solid var(--border-color); margin: 0.05rem 0;">
 
-          <div style="min-width: 0;">
-              <div style="font-size: 0.55rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Lowest</div>
-              <div class="card-value" id="stat-min" style="font-size: clamp(0.75rem, 2.5vw, 1.2rem); word-break: break-word; line-height: 1.2;">309,000</div>
-              <div class="card-subtext" id="stat-min-year" style="font-size: 0.65rem;">Year: 1909-S</div>
+          <div class="stats-block">
+              <div class="stats-kicker">Lowest</div>
+              <div class="card-value" id="stat-min" style="font-size: clamp(0.75rem, 2.5vw, 1.2rem);">309,000</div>
+              <div class="card-subtext" id="stat-min-year">Year: 1909-S</div>
           </div>
       </div>
-
   </div>
 </div>
 
-<div style="width: 50%; display: flex; justify-content: flex-start; margin-bottom: 1rem;">
+<div class="table-toolbar">
       <input type="text" id="search-input" class="search-box" placeholder="Search Year, Design, or Composition...">
   </div>
 
@@ -1292,7 +1209,7 @@ const statMax = document.getElementById('stat-max');
     displayTable();
 </script>
 <div style="position: fixed; bottom: 15px; right: 20px; font-family: monospace; font-size: 0.8rem; color: var(--text-bright); opacity: 0.55; pointer-events: none; z-index: 1000;">
-      V20
+      V23
   </div>
 </body>
 </html>
