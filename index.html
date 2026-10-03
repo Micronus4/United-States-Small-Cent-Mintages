@@ -1231,9 +1231,9 @@ const statMax = document.getElementById('stat-max');
         });
 
         statMax.textContent = maxObj.mintage.toLocaleString();
-        statMaxYear.textContent = `Year: ${maxObj.year}`;
+        statMaxYear.textContent = `${maxObj.year} – ${maxObj.design}`;
         statMin.textContent = minObj.mintage.toLocaleString();
-        statMinYear.textContent = `Year: ${minObj.year}`;
+        statMinYear.textContent = `${minObj.year} – ${minObj.design}`;
         statTotal.textContent = total.toLocaleString();
     }
 
@@ -1276,7 +1276,7 @@ const statMax = document.getElementById('stat-max');
     displayTable();
 </script>
 <div style="position: fixed; bottom: 15px; right: 20px; font-family: monospace; font-size: 0.8rem; color: var(--text-bright); opacity: 0.55; pointer-events: none; z-index: 1000;">
-      V26
+      V27
   </div>
 </body>
 </html>
